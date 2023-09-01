@@ -7,6 +7,7 @@ import avatar1 from "../../assets/images/users/avatar-1.jpg"
 import profileImg from "../../assets/images/profile-img.png"
 
 const Welcomeback = () => {
+
   return (
     <React.Fragment>
       <Card className="overflow-hidden">
@@ -15,7 +16,7 @@ const Welcomeback = () => {
             <Col xs="7">
               <div className="text-primary p-3">
                 <h5 className="text-primary">Welcome Back !</h5>
-                <p>Skote Dashboard</p>
+                <p>Skote Dashboarad</p>
               </div>
             </Col>
             <Col xs="5" className="align-self-end">

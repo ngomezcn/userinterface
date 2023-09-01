@@ -9,6 +9,9 @@ import DashboardJob from "../pages/Dashboard-job";
 // File Manager
 import FileManager from "../pages/FileManager/index"
 
+// Node Editor
+import SEINodeEditor from "../pages/NodeEditor/index"
+
 //Ecommerce
 import EcommerceAddProduct from "../pages/Ecommerce/EcommerceAddProduct";
 import EcommerceCart from "../pages/Ecommerce/EcommerceCart";
@@ -179,6 +182,9 @@ const authProtectedRoutes = [
 
   //File Manager
   { path: "/apps-filemanager", component: <FileManager /> },
+
+  //Node Editor
+  { path: "/apps-node-editor", component: <SEINodeEditor /> },
 
   //chat
   { path: "/chat", component: <Chat /> },

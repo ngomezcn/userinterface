@@ -6,6 +6,8 @@ import VerticalLayout from "./Layouts/VerticalLayout";
 import HorizotanlLayout from "./Layouts/HorizotanlLayout";
 import "./assets/scss/theme.scss";
 import NonAuthLayout from "./Layouts/NonLayout";
+import { useRete } from "rete-react-plugin";
+
 
 //constants
 import {
