@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
-    getDemoData as getDemoDataApi,
     getJobList as getJobListApi,
     deleteJobList as getDeleteJobListApi,
     getApplyJob as getApplyJobApi,
@@ -12,27 +11,14 @@ import {
     getJobCandidateList as getJobCandidateListApi
 } from "../../helpers/fakebackend_helper";
 
-/*export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
+export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
     try {
         const response = getJobListApi();
         return response;
     } catch (error) {
         return error;
     }
-});*/
-
-export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
-    try {
-        const response = getDemoDataApi();
-        console.log("CABRAAAAAA")
-        console.log(response)
-        console.log("VACAAA")
-        return response;
-    } catch (error) {
-        return error;
-    }
 });
-
 
 export const deleteJobList = createAsyncThunk("jobs/deleteJobList", async (jobs: any) => {
     try {

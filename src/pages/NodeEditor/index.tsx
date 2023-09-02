@@ -13,9 +13,18 @@ import Storage from "./Storage";
 import { createEditor } from "../../editor";
 import { useRete } from "rete-react-plugin";
 
-const Index = () => {
-  const [ref] = useRete(createEditor);
+import { useCallback } from "react";
+import { message } from "antd";
 
+const Index = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const create = useCallback(
+    (el: HTMLElement) => {
+      return createEditor(el, (text, type) => messageApi[type](text));
+    },
+    [messageApi]
+  );
+  const [ref] = useRete(create);
   //meta title
   document.title = "Node Editor | Skote - React Admin & Dashboard Template";
 
@@ -74,10 +83,10 @@ const Index = () => {
               <div className="d-md-flex">
                 {/* FileRightBar  */}
                 <FileLeftBar />
-                <div ref={ref} className="w-100"></div>
+                <div ref={ref} style={{ height: "78vh", width: "100vw" }}></div>
+
               </div>
             </div>
-            <Storage options={options} series={series} />
           </div>
         </Container>
       </div>

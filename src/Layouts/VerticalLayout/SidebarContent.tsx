@@ -168,6 +168,100 @@ const SidebarContent = (props: any) => {
               </ul>
             </li>
 
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t("Control Center")}</li>
+            <li>
+              <Link to="/control-center-b1-companies" >
+                <i className="bx bxs-business"></i>
+                <span>{props.t("B1 Companies")}</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link to="/control-center-monitor" >
+                <i className="bx bx-notepad"></i>
+                <span>{props.t("Monitor")}</span>
+              </Link>
+            </li>
+
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t("Interconnectivity")}</li>
+            <li>
+              <Link to="/interconnectivity-apps" >
+                <i className="bx bx-notepad"></i>
+                <span>{props.t("Apps")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/interconnectivity-integrations" >
+                <i className="bx bx-plug"></i>
+                <span>{props.t("Integrations")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/interconnectivity-node-editor" >
+                <i className="bx bx-git-merge"></i>
+                <span>{props.t("Node Editor")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/interconnectivity-models" >
+                <i className="bx bx-paint"></i>
+                <span>{props.t("Models")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/interconnectivity-vcs" >
+                <i className="bx bx-git-commit"></i>
+                <span>{props.t("VCS")}</span>
+              </Link>
+            </li>
+
+
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t("Miscellaneous")}</li>
+            <li>
+              <Link to="/miscellaneous-user-management" >
+                <i className="bx bx-user"></i>
+                <span>{props.t("User management")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/miscellaneous-help" >
+                <i className="bx bx-help-circle"></i>
+                <span>{props.t("Help")}</span>
+              </Link>
+            </li>
+
+
+
+          
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
+            <li className="menu-title">{props.t(" ")}</li>
             <li className="menu-title">{props.t("Apps")}</li>
 
             <li>
@@ -183,6 +277,7 @@ const SidebarContent = (props: any) => {
                 <span>{props.t("Chat")}</span>
               </Link>
             </li>
+            
             <li>
               <Link to="/apps-filemanager" >
                 <i className="bx bx-file"></i>

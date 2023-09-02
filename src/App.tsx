@@ -18,6 +18,8 @@ import fakeBackend from "./helpers/AuthType/fakeBackend";
 import { useSelector } from "react-redux";
 import { createSelector } from 'reselect';
 import AuthProtected from "Routes/AuthProtected";
+import { getDemoData } from "helpers/fakebackend_helper"
+
 
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper";
@@ -55,6 +57,7 @@ const getLayout = (layoutType: any) => {
 };
 
 function App() {
+
 
   const selectLeadData = createSelector(
     (state: any) => state.Layout,

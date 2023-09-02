@@ -1,5 +1,6 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import classnames from "classnames";
 import {
   Card,
   CardBody,
@@ -9,72 +10,272 @@ import {
   DropdownToggle,
   UncontrolledAlert,
   UncontrolledDropdown,
-} from "reactstrap"
+  Button,
+  CardText,
+  CardTitle,
+  Col,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+  UncontrolledCollapse,
+} from "reactstrap";
+
+import {
+  Message,
+} from "../../rete/nodes";
+
+import {
+  RestApiEndpoint,
+} from "../../rete/nodes/web-protocols/rest-api/endpoint";
+
+
+import {
+  editor,
+} from "../../editor";
 
 const FileRightBar = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [customActiveTab, setcustomActiveTab] = useState("1");
+  const [dropdowns, setDropdowns] = useState({
+    WebProtocols: false,
+    RestApi: false,
+    Decoder: false,
+    Encoder: false,
+    Integration: false,
+    Events: false,
+    Code: false,
+  });
 
-  const toggle = () => setIsOpen(!isOpen)
+  const toggleCustom = (tab) => {
+    if (customActiveTab !== tab) {
+      setcustomActiveTab(tab);
+    }
+  };
+
+  const toggleDropdown = (dropdownName) => {
+    setDropdowns((prevDropdowns) => ({
+      ...prevDropdowns,
+      [dropdownName]: !prevDropdowns[dropdownName],
+    }));
+  };
+
+  function spawnNode(nodeName : string)
+  {
+    let newNode : any;
+    switch (nodeName) {
+      case "RestApiEndpoint":
+        newNode = new RestApiEndpoint("REST API Node");
+        break;
+      case "message":
+        newNode = new Message("JSON Node");
+        break;
+      default:
+        break;
+    }
+
+    editor.addNode(newNode);
+  }
+
   return (
-    <React.Fragment>     
-
+    <React.Fragment>
       <Card className="filemanager-sidebar me-md-2">
         <CardBody>
           <div className="d-flex flex-column h-100">
             <div className="mb-4">
               <div className="mb-3">
-                <UncontrolledDropdown>
-                  <DropdownToggle className="btn btn-light w-100" type="button">
-                    <i className="mdi mdi-plus me-1"></i> Create New
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem href="#"><i className="bx bx-folder me-1"></i> Folder</DropdownItem>
-                    <DropdownItem href="#"><i className="bx bx-file me-1"></i> File</DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <Nav tabs className="nav-tabs-custom nav-justified">
+                  <NavItem>
+                    <NavLink
+                      style={{ cursor: "pointer" }}
+                      className={classnames({
+                        active: customActiveTab === "1",
+                      })}
+                      onClick={() => {
+                        toggleCustom("1");
+                      }}
+                    >
+                      <span className="d-block d-sm-none">
+                        <i className="fas fa-home"></i>
+                      </span>
+                      <span className="d-none d-sm-block">Editor</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      style={{ cursor: "pointer" }}
+                      className={classnames({
+                        active: customActiveTab === "2",
+                      })}
+                      onClick={() => {
+                        toggleCustom("2");
+                      }}
+                    >
+                      <span className="d-block d-sm-none">
+                        <i className="far fa-user"></i>
+                      </span>
+                      <span className="d-none d-sm-block">Properties</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      style={{ cursor: "pointer" }}
+                      className={classnames({
+                        active: customActiveTab === "3",
+                      })}
+                      onClick={() => {
+                        toggleCustom("3");
+                      }}
+                    >
+                      <span className="d-block d-sm-none">
+                        <i className="far fa-envelope"></i>
+                      </span>
+                      <span className="d-none d-sm-block">Enviroment</span>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      style={{ cursor: "pointer" }}
+                      className={classnames({
+                        active: customActiveTab === "4",
+                      })}
+                      onClick={() => {
+                        toggleCustom("4");
+                      }}
+                    >
+                      <span className="d-block d-sm-none">
+                        <i className="fas fa-cog"></i>
+                      </span>
+                      <span className="d-none d-sm-block">VCS</span>
+                    </NavLink>
+                  </NavItem>
+                </Nav>
               </div>
+
               <ul className="list-unstyled categories-list">
+                {/* Dropdown Web Protocols */}
                 <li>
                   <div className="custom-accordion">
                     <Link
                       className="text-body fw-medium py-1 d-flex align-items-center"
-                      onClick={toggle}
+                      onClick={() => toggleDropdown("WebProtocols")}
                       to="#"
                     >
-                      <i className="mdi mdi-folder font-size-16 text-warning me-2"></i>{" "}
-                      Files{" "}
-
+                      <i className="mdi mdi-web font-size-16 text-info me-2"></i>{" "}
+                      Web Protocols{" "}
                       <i
                         className={
-                          isOpen
+                          dropdowns.WebProtocols
                             ? "mdi mdi-chevron-up accor-down-icon ms-auto"
                             : "mdi mdi-chevron-down accor-down-icon ms-auto"
                         }
                       />
                     </Link>
-                    <Collapse isOpen={isOpen}>
+
+                    <Collapse isOpen={dropdowns.WebProtocols}>
+                      <div className="card border-0 shadow-none ps-2 mb-0">
+                        <ul className="list-unstyled mb-0">
+                          <li>
+                            <Link
+                              className="text-body fw-medium py-1 d-flex align-items-center"
+                              onClick={() => toggleDropdown("RestApi")}
+                              to="#"
+                            >
+                              <i className="mdi mdi-folder font-size-16 text-warning me-2"></i>{" "}
+                              REST API{" "}
+                              <i
+                                className={
+                                  dropdowns.RestApi
+                                    ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                                    : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                                }
+                              />
+                            </Link>
+                            <Collapse isOpen={dropdowns.RestApi}>
+                              <div className="card border-0 shadow-none ps-2 mb-0">
+                                <ul className="list-unstyled mb-0">
+                                  <li>
+                                    <Link
+                                      to="#"
+                                      className="d-flex align-items-center"
+                                      onClick={() => spawnNode("RestApiEndpoint")}
+                                    >
+                                      <span className="me-auto">Endpoint</span>
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      to="#"
+                                      className="d-flex align-items-center"
+                                    >
+                                      <span className="me-auto">Request</span>
+                                    </Link>
+                                  </li>
+                                  <li>
+                                    <Link
+                                      to="#"
+                                      className="d-flex align-items-center"
+                                    >
+                                      <span className="me-auto">Auth</span>
+                                    </Link>
+                                  </li>
+                                </ul>
+                              </div>
+                            </Collapse>
+                          </li>
+                        </ul>
+                      </div>
+                    </Collapse>
+                  </div>
+                </li>
+                {/* ===Dropdown Web Protocols=== */}
+
+                {/* Dropdown Decoder */}
+                <li>
+                  <div className="custom-accordion">
+                    <Link
+                      className="text-body fw-medium py-1 d-flex align-items-center"
+                      onClick={() => toggleDropdown("Decoder")}
+                      to="#"
+                    >
+                      <i className="mdi mdi-cube-unfolded font-size-16 me-2"></i>{" "}
+                      Decoder / Deserializer{" "}
+                      <i
+                        className={
+                          dropdowns.Decoder
+                            ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                            : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                        }
+                      />
+                    </Link>
+
+                    <Collapse isOpen={dropdowns.Decoder}>
                       <div className="card border-0 shadow-none ps-2 mb-0">
                         <ul className="list-unstyled mb-0">
                           <li>
                             <Link to="#" className="d-flex align-items-center">
-                              <span className="me-auto">Design</span>
+                              <span className="me-auto">JSON</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#" className="d-flex align-items-center">
-                              <span className="me-auto">Development</span>{" "}
-                              <i className="mdi mdi-pin ms-auto"></i>
+                              <span className="me-auto">XML</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#" className="d-flex align-items-center">
-                              <span className="me-auto">Project A</span>
+                              <span className="me-auto">CSV</span>
                             </Link>
                           </li>
                           <li>
                             <Link to="#" className="d-flex align-items-center">
-                              <span className="me-auto">Admin</span>{" "}
-                              <i className="mdi mdi-pin ms-auto"></i>
+                              <span className="me-auto">YAML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Custom Function</span>
                             </Link>
                           </li>
                         </ul>
@@ -82,64 +283,252 @@ const FileRightBar = () => {
                     </Collapse>
                   </div>
                 </li>
+                {/* ===Decoder=== */}
+
+                {/* Dropdown Encoder */}
                 <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-google-drive font-size-16 text-muted me-2"></i> <span className="me-auto">Google Drive</span>
-                  </Link>
+                  <div className="custom-accordion">
+                    <Link
+                      className="text-body fw-medium py-1 d-flex align-items-center"
+                      onClick={() => toggleDropdown("Encoder")}
+                      to="#"
+                    >
+                      <i className="mdi mdi-cube-outline font-size-16 me-2"></i>{" "}
+                      Encoder / Serializer{" "}
+                      <i
+                        className={
+                          dropdowns.Encoder
+                            ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                            : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                        }
+                      />
+                    </Link>
+
+                    <Collapse isOpen={dropdowns.Encoder}>
+                      <div className="card border-0 shadow-none ps-2 mb-0">
+                        <ul className="list-unstyled mb-0">
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">JSON</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">XML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">CSV</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">YAML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Custom Function</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </Collapse>
+                  </div>
                 </li>
+                {/* ===Encoder=== */}
+
+                {/* Dropdown Integration */}
                 <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-dropbox font-size-16 me-2 text-primary"></i> <span className="me-auto">Dropbox</span>
-                  </Link>
+                  <div className="custom-accordion">
+                    <Link
+                      className="text-body fw-medium py-1 d-flex align-items-center"
+                      onClick={() => toggleDropdown("Integration")}
+                      to="#"
+                    >
+                      <i className="mdi mdi-vector-difference font-size-16 me-2"></i>{" "}
+                      Integration{" "}
+                      <i
+                        className={
+                          dropdowns.Integration
+                            ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                            : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                        }
+                      />
+                    </Link>
+
+                    <Collapse isOpen={dropdowns.Integration}>
+                      <div className="card border-0 shadow-none ps-2 mb-0">
+                        <ul className="list-unstyled mb-0">
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">JSON</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">XML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">CSV</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">YAML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Custom Function</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </Collapse>
+                  </div>
                 </li>
+                {/* ===Integration=== */}
+
+                {/* Dropdown Events */}
                 <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-share-variant font-size-16 me-2"></i> <span className="me-auto">Shared</span> <i className="mdi mdi-circle-medium text-danger ms-2"></i>
-                  </Link>
+                  <div className="custom-accordion">
+                    <Link
+                      className="text-body fw-medium py-1 d-flex align-items-center"
+                      onClick={() => toggleDropdown("Events")}
+                      to="#"
+                    >
+                      <i className="mdi mdi-blur  font-size-16 me-2"></i> Events{" "}
+                      <i
+                        className={
+                          dropdowns.Events
+                            ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                            : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                        }
+                      />
+                    </Link>
+
+                    <Collapse isOpen={dropdowns.Events}>
+                      <div className="card border-0 shadow-none ps-2 mb-0">
+                        <ul className="list-unstyled mb-0">
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Task Scheduler</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">XML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">CSV</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">YAML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Custom Function</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </Collapse>
+                  </div>
                 </li>
+                {/* ===Events=== */}
+
+                {/* Dropdown Code */}
                 <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-star-outline text-muted font-size-16 me-2"></i> <span className="me-auto">Starred</span>
-                  </Link>
+                  <div className="custom-accordion">
+                    <Link
+                      className="text-body fw-medium py-1 d-flex align-items-center"
+                      onClick={() => toggleDropdown("Code")}
+                      to="#"
+                    >
+                      <i className="mdi mdi-code-braces font-size-16 me-2"></i>{" "}
+                      Code / Functions{" "}
+                      <i
+                        className={
+                          dropdowns.Code
+                            ? "mdi mdi-chevron-up accor-down-icon ms-auto"
+                            : "mdi mdi-chevron-down accor-down-icon ms-auto"
+                        }
+                      />
+                    </Link>
+
+                    <Collapse isOpen={dropdowns.Code}>
+                      <div className="card border-0 shadow-none ps-2 mb-0">
+                        <ul className="list-unstyled mb-0">
+                          <li>
+                            <Link
+                              to="#"
+                              className="d-flex align-items-center"
+                              onClick={() => toggleDropdown("Code")}
+                            >
+                              <span className="me-auto">JSON</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">XML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">CSV</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">YAML</span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to="#" className="d-flex align-items-center">
+                              <span className="me-auto">Custom Function</span>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </Collapse>
+                  </div>
                 </li>
-                <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-trash-can text-danger font-size-16 me-2"></i> <span className="me-auto">Trash</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-body d-flex align-items-center">
-                    <i className="mdi mdi-cog text-muted font-size-16 me-2"></i> <span className="me-auto">Setting</span><span className="badge bg-success rounded-pill ms-2">01</span>
-                  </Link>
-                </li>
+                {/* ===Events=== */}
               </ul>
             </div>
 
             <div className="mt-auto">
-              <UncontrolledAlert color="success" className="alert-dismissible fade show px-3 mb-0">
-                <div className="mb-3">
-                  <i className="bx bxs-folder-open h1 text-success"></i>
-                </div>
-
-                <div>
-                  <h5 className="text-success">Upgrade Features</h5>
-                  <p>Cum sociis natoque penatibus et</p>
-                  <div className="text-center">
-                    <button
-                      type="button"
-                      className="btn btn-link text-decoration-none text-success"
-                    >
-                      Upgrade <i className="mdi mdi-arrow-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </UncontrolledAlert>
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  className="btn btn-success waves-effect waves-light w-100"
+                  type="button"
+                >
+                  Save
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem href="#">
+                    <i className="bx bx-file-blank me-1"></i>Save and download
+                  </DropdownItem>
+                  <DropdownItem href="#">
+                    <i className="bx bxs-save me-1"></i>Save only
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </div>
           </div>
         </CardBody>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default FileRightBar
+export default FileRightBar;

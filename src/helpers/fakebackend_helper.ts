@@ -289,3 +289,7 @@ export const getJobGrid = () => api.get(url.GET_JOB_GRID, null);
 //job Candidate List
 export const getJobCandidateList = () => api.get(url.GET_CANDIDATE0_LIST, null);
 
+
+// CUSTOm
+export const getDemoData = () => api.get(url.GET_DEMO_DATA, null);
+                

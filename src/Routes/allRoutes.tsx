@@ -6,6 +6,10 @@ import DashboardCrypto from "../pages/Dashboard-crypto";
 import DashboardBlog from "../pages/Dashboard-blog";
 import DashboardJob from "../pages/Dashboard-job";
 
+
+// B1 Companies
+import B1Companies from "../pages/b1-companies/index"
+
 // File Manager
 import FileManager from "../pages/FileManager/index"
 
@@ -180,11 +184,15 @@ const authProtectedRoutes = [
   { path: "/dashboard-blog", component: <DashboardBlog /> },
   { path: "/dashboard-job", component: <DashboardJob /> },
 
-  //File Manager
-  { path: "/apps-filemanager", component: <FileManager /> },
+
+  // B1 Companies
+  { path: "/control-center-b1-companies", component: <B1Companies /> },
 
   //Node Editor
   { path: "/apps-node-editor", component: <SEINodeEditor /> },
+
+  //File Manager
+  { path: "/apps-filemanager", component: <FileManager /> },
 
   //chat
   { path: "/chat", component: <Chat /> },

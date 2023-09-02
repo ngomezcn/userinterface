@@ -1,3 +1,12 @@
+// CUSTOM
+
+export const GET_DEMO_DATA = "https://localhost:7082/B1Companies";
+//export const GET_DEMO_DATA = "https://jsonplaceholder.typicode.com/posts";
+
+
+// ===CUSTOM===
+
+
 //REGISTER
 export const POST_FAKE_REGISTER = "/post-fake-register";
 
