@@ -4,10 +4,10 @@ export const BASE_HOST = "https://localhost:7082";
 
 
 export const GET_DEMO_DATA = BASE_HOST + "/B1Companies";
-export const GET_INTEGRATIONS = BASE_HOST + "/Integrations";
 export const GET_INTEGRATION_TEMPLATES = BASE_HOST + "/IntegrationTemplates";
-//export const GET_DEMO_DATA = "https://jsonplaceholder.typicode.com/posts";
 
+export const GET_INTEGRATIONS = BASE_HOST + "/Integrations";
+export const POST_INTEGRATION = BASE_HOST + "/Integrations";
 
 // ===CUSTOM===
 

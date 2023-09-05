@@ -9,6 +9,7 @@ import {
     getOrders as getOrdersApi,
     deleteOrder as deleteOrderApi,
     addNewOrder as addNewOrderApi,
+    addNewIntegration as addNewIntegrationApi,
     updateOrder as updateOrderApi,
     getCustomers as getCustomersApi,
     addNewCustomer as addNewCustomerApi,
@@ -78,8 +79,14 @@ export const deleteOrder = createAsyncThunk("ecommerence/deleteorder", async (or
 
 export const addNewOrder = createAsyncThunk("ecommerence/addorder", async (order: any) => {
     try {
-        const response = addNewOrderApi(order);
-        return response;
+        //const response = addNewOrderApi(order);
+        console.log("ANTES")
+        console.log(JSON.stringify(order))
+        console.log("ANTES")
+        const response = addNewIntegrationApi(order);
+        console.log(response.status); // Muestra el código de estado HTTP
+        console.log("DESPUES")
+        return response.data;
     } catch (error) {
         return error;
     }

@@ -61,6 +61,7 @@ const EcommerceSlice = createSlice({
         });
 
         builder.addCase(addNewOrder.fulfilled, (state: any, action: any) => {
+            console.log()
             state.orders.push(action.payload);
             state.isOrderCreated = true;
         });

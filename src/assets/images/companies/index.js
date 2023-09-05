@@ -18,7 +18,6 @@ import aliernet from "./img-10.png"
 import graph from "./graph.svg"
 import folder from "./folder.png"
 
-
 const index = {
   img1,
   img4,

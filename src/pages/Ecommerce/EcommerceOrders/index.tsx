@@ -124,6 +124,9 @@ function EcommerceOrder() {
           paymentMethod: values["paymentMethod"],
           badgeclass: values["badgeclass"],
         };
+
+        console.log(newOrder)
+
         // save new order
         dispatch(onAddNewOrder(newOrder));
         validation.resetForm();

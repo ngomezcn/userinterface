@@ -5,7 +5,7 @@ import { Card, CardBody, Col, Collapse, Row, Form, Label, Input } from 'reactstr
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
 
-const JobFilter = ({ jobdata, setJobGrid }: any) => {
+const JobFilter = ({ jobdata, setJobGrid, toggleModal }: any) => {
     const [selectDate, setSelectDate] = useState();
     const dateChange = (date: any) => {
         setSelectDate(date)
@@ -47,7 +47,7 @@ const JobFilter = ({ jobdata, setJobGrid }: any) => {
                         <CardBody>
                             <Form>
                                 <Row className="g-3">
-                                    <Col xxl={4} lg={4}>
+                                    <Col xxl={3} lg={4}>
                                         <div className="position-relative">
                                             <Input type="text" id="searchJob" placeholder="Search your job" onChange={hadnleSearch} />
                                         </div>
@@ -82,11 +82,11 @@ const JobFilter = ({ jobdata, setJobGrid }: any) => {
                                         </div>
                                     </Col>
 
-                                    <Col xxl={2} lg={6}>
+                                    <Col xxl={3} lg={6}>
                                         <div className="position-relative h-100 hstack gap-3">
-                                            <button type="submit" className="btn btn-primary h-100 w-100"><i className="bx bx-search-alt align-middle"></i> Filter</button>
-                                            <a href="!#" onClick={toggle} className="btn btn-secondary h-100 w-100">
-                                                <i className="bx bx-filter-alt align-middle"></i> Advance</a>
+                                            <button type="submit" className="btn btn-primary h-100 w-100"><i className="bx bx-filter-alt align-middle"></i> Filter</button>
+                                            <a  onClick={toggleModal} className="btn btn-secondary h-100 w-100">
+                                            <i className="bx bx-plus-circle align-middle"></i> Blank project</a>
                                         </div>
                                     </Col>
 

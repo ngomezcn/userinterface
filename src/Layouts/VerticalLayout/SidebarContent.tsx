@@ -286,13 +286,6 @@ const SidebarContent = (props: any) => {
             </li>
 
             <li>
-              <Link to="/apps-node-editor" >
-                <i className="bx bx-git-merge"></i>
-                <span>{props.t("Node Editor")}</span>
-              </Link>
-            </li>
-
-            <li>
               <Link to="/#" className="has-arrow">
                 <i className="bx bx-store"></i>
                 <span>{props.t("Ecommerce")}</span>

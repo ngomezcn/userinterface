@@ -6,7 +6,6 @@ import DashboardCrypto from "../pages/Dashboard-crypto";
 import DashboardBlog from "../pages/Dashboard-blog";
 import DashboardJob from "../pages/Dashboard-job";
 
-
 // B1 Companies
 import B1Companies from "../pages/B1-companies/index"
 
@@ -19,14 +18,15 @@ import Integrations from "../pages/Integrations/index"
 // IntegrationsTemplates
 import IntegrationsTemplates from "../pages/Integration-templates/index"
 
+// Node Editor
+import LogicNodeEditor from "../pages/NodeEditor/index"
+
 // Integrations Template Details
 import IntegrationTemplateDetail from "../pages/Integration-template-detail/index"
 
 // File Manager
 import FileManager from "../pages/FileManager/index"
 
-// Node Editor
-import SEINodeEditor from "../pages/NodeEditor/index"
 
 //Ecommerce
 import EcommerceAddProduct from "../pages/Ecommerce/EcommerceAddProduct";
@@ -213,7 +213,7 @@ const authProtectedRoutes = [
   { path: "/integration-template-detail", component: <IntegrationTemplateDetail/> },
 
   //Node Editor
-  { path: "/apps-node-editor", component: <SEINodeEditor /> },
+  { path: "/interconnectivity-node-editor", component: <LogicNodeEditor /> },
 
   //File Manager
   { path: "/apps-filemanager", component: <FileManager /> },
