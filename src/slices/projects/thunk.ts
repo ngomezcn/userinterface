@@ -2,15 +2,28 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
     getProjects as getProjectsApi,
+    getIntegrations as getIntegrationsApi,
     getProjectsDetail as getProjectsDetailApi,
     addNewProject as addNewProjectApi,
     updateProject as updateProjectApi,
-    deleteProject as deleteProjectApi
+    deleteProject as deleteProjectApi,
+    getDemoData
 } from "../../helpers/fakebackend_helper";
+import { getIn } from "yup/lib/util/reach";
+
+export const getIntegrations = createAsyncThunk("projects/getProjects", async () => {
+    try {
+        const response = getIntegrationsApi();
+        return response;
+    } catch (error) {
+        return error;
+    }
+});
 
 export const getProjects = createAsyncThunk("projects/getProjects", async () => {
     try {
         const response = getProjectsApi();
+        console.log(response)
         return response;
     } catch (error) {
         return error;

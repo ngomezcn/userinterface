@@ -8,7 +8,19 @@ import DashboardJob from "../pages/Dashboard-job";
 
 
 // B1 Companies
-import B1Companies from "../pages/b1-companies/index"
+import B1Companies from "../pages/B1-companies/index"
+
+// Monitor
+import Monitor from "../pages/Monitor/index"
+
+// Monitor
+import Integrations from "../pages/Integrations/index"
+
+// IntegrationsTemplates
+import IntegrationsTemplates from "../pages/Integration-templates/index"
+
+// Integrations Template Details
+import IntegrationTemplateDetail from "../pages/Integration-template-detail/index"
 
 // File Manager
 import FileManager from "../pages/FileManager/index"
@@ -187,6 +199,18 @@ const authProtectedRoutes = [
 
   // B1 Companies
   { path: "/control-center-b1-companies", component: <B1Companies /> },
+
+  // Monitor
+  { path: "/control-center-monitor", component: <Monitor/> },
+
+  // Integrations
+  { path: "/interconnectivity-integrations", component: <Integrations/> },
+  
+  // Integrations Templates
+  { path: "/integration-templates", component: <IntegrationsTemplates/> },
+
+  // Integrations Template Details
+  { path: "/integration-template-detail", component: <IntegrationTemplateDetail/> },
 
   //Node Editor
   { path: "/apps-node-editor", component: <SEINodeEditor /> },

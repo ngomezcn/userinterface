@@ -249,8 +249,7 @@ export const updateProject = (project: any) => api.put(url.UPDATE_PROJECT, proje
 export const deleteProject = (project: any) => api.delete(url.DELETE_PROJECT, { headers: { project } });
 
 // get project details
-export const getProjectsDetail = (id: any) =>
-  api.get(`${url.GET_PROJECT_DETAIL}/${id}`, { params: { id } });
+export const getProjectsDetail = (id: any) => api.get(`${url.GET_PROJECT_DETAIL}/${id}`, { params: { id } });
 
 // Dashboard Analytics
 
@@ -289,7 +288,10 @@ export const getJobGrid = () => api.get(url.GET_JOB_GRID, null);
 //job Candidate List
 export const getJobCandidateList = () => api.get(url.GET_CANDIDATE0_LIST, null);
 
+// by ngomez
 
-// CUSTOm
 export const getDemoData = () => api.get(url.GET_DEMO_DATA, null);
-                
+
+export const getIntegrations = () => api.get(url.GET_INTEGRATIONS, null);
+
+export const getIntegrationTemplates = () => api.get(url.GET_INTEGRATION_TEMPLATES, null);

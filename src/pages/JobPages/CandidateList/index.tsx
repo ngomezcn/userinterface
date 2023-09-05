@@ -126,7 +126,7 @@ const CandidateList = () => {
 
                                             <Col xxl={2} lg={6}>
                                                 <div className="position-relative h-100 hstack gap-3">
-                                                    <Button type="button" color='primary' className="h-100 w-100"><i className="bx bx-search-alt align-middle"></i> Find Jobs</Button>
+                                                    <Button type="button" color='primary' className="h-100 w-100"><i className="bx bx-search-alt align-middle"></i> Filter</Button>
                                                     <Link to="#" onClick={toggle} className="btn btn-secondary h-100 w-100">
                                                         <i className="bx bx-filter-alt align-middle"></i> Advance</Link>
                                                 </div>

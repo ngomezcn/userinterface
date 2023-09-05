@@ -47,9 +47,9 @@ const JobFilter = ({ jobdata, setJobGrid }: any) => {
                         <CardBody>
                             <Form>
                                 <Row className="g-3">
-                                    <Col xxl={4} lg={4}>
+                                    <Col xxl={3} lg={4}>
                                         <div className="position-relative">
-                                            <Input type="text" id="searchJob" placeholder="Search your job" onChange={hadnleSearch} />
+                                            <Input type="text" id="searchJob" placeholder="Search your project" onChange={hadnleSearch} />
                                         </div>
                                     </Col>
 
@@ -69,7 +69,7 @@ const JobFilter = ({ jobdata, setJobGrid }: any) => {
                                         <div className="position-relative">
                                             <div id="datepicker1">
                                                 <Flatpickr
-                                                    placeholder='select data'
+                                                    placeholder='select date'
                                                     value={selectDate}
                                                     onChange={dateChange}
                                                     options={{
@@ -82,11 +82,11 @@ const JobFilter = ({ jobdata, setJobGrid }: any) => {
                                         </div>
                                     </Col>
 
-                                    <Col xxl={2} lg={6}>
+                                    <Col xxl={3} lg={6}>
                                         <div className="position-relative h-100 hstack gap-3">
-                                            <button type="submit" className="btn btn-primary h-100 w-100"><i className="bx bx-search-alt align-middle"></i> Filter</button>
-                                            <a href="!#" onClick={toggle} className="btn btn-secondary h-100 w-100">
-                                                <i className="bx bx-filter-alt align-middle"></i> Advance</a>
+                                            <button type="submit" className="btn btn-primary h-100 w-100"><i className="bx bx-filter-alt align-middle"></i> Filter</button>
+                                            <a href="/integration-templates" className="btn btn-secondary h-100 w-100">
+                                                <i className="bx bx-plus-circle align-middle"></i> Add integration</a>
                                         </div>
                                     </Col>
 
