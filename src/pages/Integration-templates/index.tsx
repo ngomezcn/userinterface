@@ -59,42 +59,24 @@ import { addNewIntegration as addNewIntegrationApi } from "../../helpers/fakebac
 
 const IntegrationsTemplates = () => {
   document.title = "Integration Templates";
+  let navigate = useNavigate();
 
   const [modal, setModal] = useState<boolean>(false);
-  const [modal1, setModal1] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [order, setOrder] = useState<any>(null);
-  const [currentpages, setCurrentpages] = useState<any>();
 
   const dispatch = useDispatch<any>();
 
   const validation: any = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      orderId: (order && order.orderId) || "",
-      billingName: (order && order.billingName) || "",
-      orderdate: (order && order.orderdate) || "",
-      total: (order && order.total) || "",
-      paymentStatus: (order && order.paymentStatus) || "Paid",
-      badgeclass: (order && order.badgeclass) || "success",
-      paymentMethod: (order && order.paymentMethod) || "Mastercard",
-
       projectName: (order && order.projectName) || "",
       description: (order && order.description) || "",
       mainEnviroment: (order && order.mainEnviroment) || "",
       optionalEnviroments: (order && order.optionalEnviroments) || "",
     },
     validationSchema: Yup.object({
-      /*orderId: Yup.string().required("Please Enter Your Order Id"),
-      billingName: Yup.string().required("Please Enter Your Billing Name"),
-      orderdate: Yup.string().required("Please Enter Your Order Date"),
-      total: Yup.string().required("Total Amount"),
-      paymentStatus: Yup.string().required("Please Enter Your Payment Status"),
-      badgeclass: Yup.string().required("Please Enter Your Badge Class"),
-      paymentMethod: Yup.string().required("Please Enter Your Payment Method"),*/
-
       projectName: Yup.string().required(
         "Please Enter Your Payment Project Name"
       ),
@@ -102,121 +84,28 @@ const IntegrationsTemplates = () => {
         "Please Enter Your Main Enviroment"
       ),
     }),
-    onSubmit: (values: any) => {
-      if (isEdit) {
-        const updateOrder = {
-          id: order ? order.id : 0,
-          orderId: values.orderId,
-          billingName: values.billingName,
-          orderdate: values.orderdate,
-          total: values.total,
-          paymentStatus: values.paymentStatus,
-          paymentMethod: values.paymentMethod,
-          badgeclass: values.badgeclass,
+    onSubmit: async (values: any) => {
+      try {
+        if (isEdit) {
+          validation.resetForm();
+        } else {
+          const newOrder = {
+            projectName: values["projectName"],
+            description: values["description"],
+            mainEnviroment: values["mainEnviroment"],
+            optionalEnviroments: values["optionalEnviroments"],
+          };
+          const response = await addNewIntegrationApi(newOrder);
 
-          projectName: values.projectName,
-          description: values.description,
-          mainEnviroment: values.mainEnviroment,
-          optionalEnviroments: values.optionalEnviroments,
-        };
-        // update order
-        dispatch(onUpdateOrder(updateOrder));
-        validation.resetForm();
-      } else {
-        const newOrder = {
-          id: Math.floor(Math.random() * (30 - 20)) + 20,
-          orderId: values["orderId"],
-          billingName: values["billingName"],
-          orderdate: values["orderdate"],
-          total: values["total"],
-          paymentStatus: values["paymentStatus"],
-          paymentMethod: values["paymentMethod"],
-          badgeclass: values["badgeclass"],
-
-          projectName: values["projectName"],
-          description: values["description"],
-          mainEnviroment: values["mainEnviroment"],
-          optionalEnviroments: values["optionalEnviroments"],
-        };
-
-        console.log(newOrder);
-
-        // save new order
-        //dispatch(onAddNewOrder(newOrder));
-        validation.resetForm();
+          navigate(`/interconnectivity-node-editor/${response.id}`);
+          validation.resetForm();
+        }
+        toggle();
+      } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
       }
-      toggle();
     },
   });
-
-  /*const validation: any = useFormik({
-    enableReinitialize: true,
-
-    initialValues: {
-      projectName: (order && order.projectName) || "",
-      description: (order && order.description) || "",
-      optionalEnviroments: (order && order.optionalEnviroments) || "",
-      mainEnviroment: (order && order.mainEnviroment) || "",
-    },
-    validationSchema: Yup.object({
-      projectName: Yup.string().required("Please Enter Your Project Name"),
-      mainEnviroment: Yup.string().required("Please Enter Your Enviroment"),
-    }),
-    onSubmit: (values: any) => {
-      /*try {
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString();
-
-        const newIntegration = {
-          projectName: values.projectName,
-          description: values.description,
-          mainEnviroment: values.mainEnviroment,
-          optionalEnviroments: values.optionalEnviroments,
-          date: formattedDate,
-        };
-
-        // Realiza la solicitud a la API y espera la respuesta
-        const response = await addNewIntegrationApi(newIntegration);
-
-        // Asegúrate de que la respuesta sea un objeto válido
-        if (response && response.data) {
-          const newOrderData = response.data;
-          console.log(newOrderData);
-
-          // Redirige a la página correspondiente
-          navigate(`/order/${newOrderData.id}`);
-
-          // Reinicia el formulario
-          validation.resetForm();
-          toggle();
-        } else {
-          console.error("Respuesta de API inválida");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-      const currentDate: Date = new Date();
-      const formattedDate: string = currentDate.toISOString();
-
-      const newIntegration = {
-        projectName: values["projectName"],
-        description: values["description"],
-        mainEnviroment: values["mainEnviroment"],
-        optionalEnviroments: values["optionalEnviroments"],
-        date: formattedDate,
-      };
-      console.log("QUE COJONES")
-      console.log(order)
-      console.log(JSON.stringify(newIntegration));
-      console.log(newIntegration)
-      console.log("QUE COJONES")
-
-      //console.log(values)
-      dispatch(onAddNewOrder(newIntegration));
-      validation.resetForm();
-      toggle();
-    },
-  });*/
 
   const selectProperties = createSelector(
     (state: any) => state.jobs,
