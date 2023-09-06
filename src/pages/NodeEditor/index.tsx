@@ -10,21 +10,25 @@ import FileList from "./FileList";
 import RecentFile from "./RecentFile";
 import Storage from "./Storage";
 
-import { createEditor } from "../../editor";
+import { createEditor } from "./editor";
 import { useRete } from "rete-react-plugin";
 
 import { useCallback } from "react";
 import { message } from "antd";
 
 const Index = () => {
-  const [messageApi, contextHolder] = message.useMessage();
+  /*const [messageApi, contextHolder] = message.useMessage();
   const create = useCallback(
     (el: HTMLElement) => {
       return createEditor(el, (text, type) => messageApi[type](text));
     },
     [messageApi]
   );
-  const [ref] = useRete(create);
+  const [ref] = useRete(create);*/
+
+  const [ref] = useRete(createEditor);
+
+
   //meta title
   document.title = "Node Editor | Skote - React Admin & Dashboard Template";
 

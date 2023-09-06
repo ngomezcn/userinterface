@@ -25,16 +25,16 @@ import {
 
 import {
   Message,
-} from "../../rete/nodes";
+} from "./rete/nodes";
 
 import {
   RestApiEndpoint,
-} from "../../rete/nodes/web-protocols/rest-api/endpoint";
+} from "./rete/nodes/web-protocols/rest-api/endpoint";
 
 
 import {
   editor,
-} from "../../editor";
+} from "./editor";
 
 const FileRightBar = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");

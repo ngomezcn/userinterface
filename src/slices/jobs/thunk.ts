@@ -25,9 +25,6 @@ import {
 export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
     try {
         const response = getDemoDataApi();
-        console.log("CABRAAAAAA")
-        console.log(response)
-        console.log("VACAAA")
         return response;
     } catch (error) {
         return error;
