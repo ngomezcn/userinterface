@@ -1,10 +1,10 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { Card, CardBody } from "reactstrap"
-import ReactApexChart from "react-apexcharts"
+import React from "react";
+import { Link } from "react-router-dom";
+import { Card, CardBody } from "reactstrap";
+import ReactApexChart from "react-apexcharts";
 
-const Storage = (props:any) => {
-  const { options, series } = props
+const Storage = (props: any) => {
+  const { options, series } = props;
   return (
     <React.Fragment>
       <Card className="filemanager-sidebar ms-lg-2">
@@ -149,7 +149,7 @@ const Storage = (props:any) => {
         </CardBody>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Storage
+export default Storage;

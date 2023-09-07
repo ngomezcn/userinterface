@@ -108,7 +108,7 @@
     "rete-render-utils": "^2.0.1",
     "rete-scopes-plugin": "^2.0.0",
     "rete-structures": "^2.0.0",
-    "simplebar-react": "^3.2.0",
+    "simplebar-react": "^3.2.4",
     "styled-components": "^6.0.7",
     "swiper": "^9.0.3",
     "toastr": "^2.1.4",

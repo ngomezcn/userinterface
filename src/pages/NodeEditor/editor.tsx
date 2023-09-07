@@ -16,6 +16,7 @@ import {
 import {
 Message
 } from "./rete/nodes";
+import { selector } from "rete-area-plugin/_types/extensions";
 
 class ButtonControl extends ClassicPreset.Control {
   constructor(public label: string, public onClick: () => void) {
@@ -72,8 +73,9 @@ type Schemes = GetSchemes<
 >;
 type AreaExtra = ReactArea2D<any> | ContextMenuExtra;
 
-
 export let editor;
+
+let test = true
 
 export async function createEditor(container: HTMLElement) {
   const socket = new ClassicPreset.Socket("socket");
@@ -82,13 +84,19 @@ export async function createEditor(container: HTMLElement) {
   const area = new AreaPlugin<Schemes, AreaExtra>(container);
   const connection = new ConnectionPlugin<Schemes, AreaExtra>();
   const render = new ReactPlugin<Schemes, AreaExtra>({ createRoot });
+  const selector = AreaExtensions.selector()
+  const accumulating = AreaExtensions.accumulateOnCtrl()
 
-  AreaExtensions.selectableNodes(area, AreaExtensions.selector(), {
+  AreaExtensions.selectableNodes(area, selector, { accumulating });
+
+  /*AreaExtensions.selectableNodes(area, AreaExtensions.selector(), {
     accumulating: AreaExtensions.accumulateOnCtrl()
-  });
+  });*/
+
+
+
 
   render.addPreset(Presets.classic.setup());
-
   connection.addPreset(ConnectionPresets.classic.setup());
 
   editor.use(area);
@@ -99,7 +107,6 @@ export async function createEditor(container: HTMLElement) {
 
   const ab = new Message("Hello!");
   await editor.addNode(ab);
-
 
   const a = new ClassicPreset.Node("A");
   a.addControl("d", new ClassicPreset.InputControl("text", { initial: "a" }));
@@ -116,7 +123,36 @@ export async function createEditor(container: HTMLElement) {
   await area.translate(a.id, { x: 0, y: 0 });
   await area.translate(b.id, { x: 270, y: 0 });
 
-  console.log(exportGraph(editor))
+  area.addPipe(context => {
+    
+    if (context.type === 'nodepicked')
+    {
+      console.log("nodepicked")
+      console.log("selector" + selector.pickId) 
+      console.log("nodes" + JSON.stringify(editor.getNodes())) 
+
+      let id : string = selector.pickId?.replace("node_", "") || "";
+      let a = editor.getNodes().find(node => node.id === id);
+
+      if(test)
+      {
+        a?.addOutput("rly", new ClassicPreset.Output(socket));
+        test = false
+      }
+      area.update("node", id)
+
+      let xd = a as Message
+
+      console.log(xd?.holaTest)
+
+      //[0].addOutput("rly", new ClassicPreset.Output(socket));
+      //area.update()
+
+    }
+
+    return context
+  })
+
 
   editor.addPipe(context => {
     
@@ -133,24 +169,25 @@ export async function createEditor(container: HTMLElement) {
     context.type === 'cleared' 
     ) 
     {
-      console.clear()
-      console.log("wtf")
-      //const WTF = exportGraph(editor);
-      //console.log(JSON.stringify(WTF))
-      //console.log(editor.getNodes())
-      //console.log(editor.getConnections())
-      console.log(JSON.stringify(editor.getNodes()))
-      console.log(JSON.stringify(editor.getConnections()))
-      return context
+    
     }*/
     console.clear()
-      console.log("wtf")
-      //const WTF = exportGraph(editor);
-      //console.log(JSON.stringify(WTF))
-      //console.log(editor.getNodes())
-      //console.log(editor.getConnections())
-      console.log(JSON.stringify(editor.getNodes()))
-      console.log(JSON.stringify(editor.getConnections()))
+      console.log("Nodes: " + JSON.stringify(editor.getNodes()))
+      console.log("Connections: " + JSON.stringify(editor.getConnections()))
+      console.log("Context: " + JSON.stringify(context))
+
+      if(test)
+      {
+        console.log("editor.getNodes()[0].: " + editor.getNodes()[0])
+
+        test = false
+      }
+
+
+
+      //console.log("EXPORT")
+      //console.log(exportGraph(editor))
+    
     return context
   })
 

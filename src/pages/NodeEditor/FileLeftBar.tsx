@@ -23,18 +23,11 @@ import {
   UncontrolledCollapse,
 } from "reactstrap";
 
-import {
-  Message,
-} from "./rete/nodes";
+import { Message } from "./rete/nodes";
 
-import {
-  RestApiEndpoint,
-} from "./rete/nodes/web-protocols/rest-api/endpoint";
+import { RestApiEndpoint } from "./rete/nodes/web-protocols/rest-api/endpoint";
 
-
-import {
-  editor,
-} from "./editor";
+import { editor } from "./editor";
 
 const FileRightBar = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
@@ -61,9 +54,8 @@ const FileRightBar = () => {
     }));
   };
 
-  function spawnNode(nodeName : string)
-  {
-    let newNode : any;
+  function spawnNode(nodeName: string) {
+    let newNode: any;
     switch (nodeName) {
       case "RestApiEndpoint":
         newNode = new RestApiEndpoint("REST API Node");
@@ -199,7 +191,9 @@ const FileRightBar = () => {
                                     <Link
                                       to="#"
                                       className="d-flex align-items-center"
-                                      onClick={() => spawnNode("RestApiEndpoint")}
+                                      onClick={() =>
+                                        spawnNode("RestApiEndpoint")
+                                      }
                                     >
                                       <span className="me-auto">Endpoint</span>
                                     </Link>
@@ -506,7 +500,7 @@ const FileRightBar = () => {
               </ul>
             </div>
 
-            <div className="mt-auto">
+            <div className="mt-auto" style={{ marginBottom: "15px" }}>
               <UncontrolledDropdown>
                 <DropdownToggle
                   className="btn btn-success waves-effect waves-light w-100"

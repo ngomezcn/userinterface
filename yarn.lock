@@ -12985,7 +12985,7 @@ simplebar-core@^1.2.4:
     lodash "^4.17.21"
     lodash-es "^4.17.21"
 
-simplebar-react@^3.2.0:
+simplebar-react@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/simplebar-react/-/simplebar-react-3.2.4.tgz#fa495e50048c497c767fb5591b106658f160b240"
   integrity sha512-ogLN79e7JUm82wJChD7NSUB+4EHCFvDkjXpiu8hT1Alk7DnCekUWds61NXcsP9jC97KOgF5To/AVjYFbX0olgg==
