@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Row, Col, BreadcrumbItem } from "reactstrap";
 
 const Breadcrumb = (props: any) => {
+  const breadcrumbText = props.customRoute || props.breadcrumbItem;
+
   return (
     <Row>
       <Col className="col-12">
@@ -14,7 +16,7 @@ const Breadcrumb = (props: any) => {
                 <Link to="#">{props.title}</Link>
               </BreadcrumbItem>
               <BreadcrumbItem active>
-                <Link to="#">{props.breadcrumbItem}</Link>
+                <Link to="#">{breadcrumbText}</Link>
               </BreadcrumbItem>
             </ol>
           </div>

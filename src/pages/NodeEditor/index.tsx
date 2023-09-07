@@ -6,11 +6,13 @@ import Breadcrumbs from "../../Components/Common/Breadcrumb";
 
 // import Component
 import FileLeftBar from "./FileLeftBar";
+import NodeProperties from "./NodeProperties";
 import FileList from "./FileList";
 import RecentFile from "./RecentFile";
 import Storage from "./Storage";
+import PropagateLoader from "react-spinners/ClipLoader";
 
-import { createEditor } from "./editor";
+import { createEditor, editor } from "./editor";
 import { useRete } from "rete-react-plugin";
 
 import { useCallback } from "react";
@@ -34,6 +36,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Switch from "react-switch";
 import Select from "react-select";
 import { useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import "flatpickr/dist/themes/material_blue.css";
 import Flatpickr from "react-flatpickr";
@@ -41,100 +44,66 @@ import Flatpickr from "react-flatpickr";
 import SimpleBar from "simplebar-react";
 import { Link } from "react-router-dom";
 
+import { getIntegrationById } from "../../helpers/fakebackend_helper";
+
 const Index = () => {
-  const simpleBarRef = useRef(null);
-
-  useEffect(
-    () => {
-      if (simpleBarRef.current) {
-        //simpleBarRef.current.recalculate(); // Recalcula SimpleBar cuando el contenido cambia
-      }
-    },
-    [
-      /* Dependencias que desees monitorear */
-    ]
-  );
-
-  /*const [messageApi, contextHolder] = message.useMessage();
-  const create = useCallback(
-    (el: HTMLElement) => {
-      return createEditor(el, (text, type) => messageApi[type](text));
-    },
-    [messageApi]
-  );
-  const [ref] = useRete(create);*/
-
+  //const [data, setData] = useState(null); // Estado para almacenar los datos de la API
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const { id } = useParams();
+  const [data, dataSet] = useState<any>(null);
   const [ref] = useRete(createEditor);
+  document.title = "Node Editor";
 
-  //meta title
-  document.title = "Node Editor | Skote - React Admin & Dashboard Template";
+  useEffect(() => {
+    // Realiza una llamada a la API utilizando el parámetro 'id'
+    // Reemplaza 'apiUrl' con la URL real de tu punto de acceso de la API
+    async function fetchMyAPI() {
+      //let response = await fetch('api/data')
+      console.log("Llamada");
 
-  const series = [76];
-  const options = {
-    chart: {
-      height: 150,
-      type: "radialBar",
-      sparkline: {
-        enabled: true,
-      },
-    },
-    colors: ["#556ee6"],
-    plotOptions: {
-      radialBar: {
-        startAngle: -90,
-        endAngle: 90,
-        track: {
-          background: "#e7e7e7",
-          strokeWidth: "97%",
-          margin: 5, // margin is in pixels
-        },
+      let idIntegration = id || "";
+      let response = await getIntegrationById(idIntegration);
+      dataSet(response);
+      console.log("Respuesta: " + JSON.stringify(response));
+      setLoading(false); // Set loading to false
+    }
 
-        hollow: {
-          size: "60%",
-        },
+    fetchMyAPI();
+  }, [id]);
 
-        dataLabels: {
-          name: {
-            show: false,
-          },
-          value: {
-            offsetY: -2,
-            fontSize: "16px",
-          },
-        },
-      },
-    },
-    grid: {
-      padding: {
-        top: -10,
-      },
-    },
-    stroke: {
-      dashArray: 3,
-    },
-    labels: ["Storage"],
-  };
-  const divStyle = {
-    backgroundColor: "blue", // Cambia 'blue' al color que desees
-    width: "200px", // Añade otros estilos según tus necesidades
-    height: "100px",
-    // Puedes añadir más propiedades de estilo aquí si es necesario
-  };
+  if (loading) {
+    return (
+      <div
+        className="page-content"
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+          <PropagateLoader color="#556ee6" />
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
       <div className="page-content" style={{ height: "100vh" }}>
         <Container fluid style={{ height: "100%" }}>
-          <Breadcrumbs title="Apps" breadcrumbItem="Node Editor" />
+          <Breadcrumbs
+            title="Interconnectivity"
+            breadcrumbItem={"Node Editor - " + data.projectName}
+            customRoute = "Node Editor"
+          />
           <div className="d-xl-flex flex-column" style={{ height: "100%" }}>
             <div className="w-100" style={{ height: "100%" }}>
               <div
                 className="d-md-flex flex-column flex-md-row"
                 style={{ height: "100%" }}
               >
-                {/* FileLeftBar */}
                 <FileLeftBar />
 
-                {/* Div de la tarjeta */}
                 <div
                   ref={ref}
                   className="w-100"
@@ -146,181 +115,7 @@ const Index = () => {
                   }}
                 ></div>
 
-                <SimpleBar
-                  style={{ maxHeight: "80vh", marginBottom: "-10px" }}
-                  autoHide={true} // Configura esto según tus preferencias
-                  ref={simpleBarRef}
-                >
-                  <Card>
-                    <CardBody>
-                      <h4 className="card-title">Datepicker</h4>
-                      <p className="card-title-desc">
-                        Examples of twitter bootstrap datepicker.
-                      </p>
-
-                      <Form>
-                        <FormGroup className="mb-4">
-                          <Label>Default Functionality</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <div className="form-group mb-4">
-                          <Label>Auto Close</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </div>
-
-                        <div className="form-group mb-4">
-                          <label>Multiple Date</label>
-                          <div className="input-group">
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                mode: "multiple",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        <FormGroup className="mb-4">
-                          <Label>Date Range</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                mode: "range",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-
-                        <div className="form-group mb-0">
-                          <label>Inline Datepicker</label>
-                          <Flatpickr
-                            className="form-control d-block"
-                            placeholder="dd M,yyyy"
-                            options={{
-                              inline: true,
-                              altInput: true,
-                              altFormat: "F j, Y",
-                              dateFormat: "Y-m-d",
-                            }}
-                          />
-                        </div>
-                      </Form>
-                    </CardBody>
-                  </Card>
-                </SimpleBar>
-
-                {/**  <div  className="h-100"  style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                  <Card >
-                    <CardBody>
-                      <h4 className="card-title">Datepicker</h4>
-                      <p className="card-title-desc">
-                        Examples of twitter bootstrap datepicker.
-                      </p>
-
-                      <Form>
-                        <FormGroup className="mb-4">
-                          <Label>Default Functionality</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <div className="form-group mb-4">
-                          <Label>Auto Close</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </div>
-
-                        <div className="form-group mb-4">
-                          <label>Multiple Date</label>
-                          <div className="input-group">
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                mode: "multiple",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        <FormGroup className="mb-4">
-                          <Label>Date Range</Label>
-                          <InputGroup>
-                            <Flatpickr
-                              className="form-control d-block"
-                              placeholder="dd M,yyyy"
-                              options={{
-                                mode: "range",
-                                dateFormat: "Y-m-d",
-                              }}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-
-                        <div className="form-group mb-0">
-                          <label>Inline Datepicker</label>
-                          <Flatpickr
-                            className="form-control d-block"
-                            placeholder="dd M,yyyy"
-                            options={{
-                              inline: true,
-                              altInput: true,
-                              altFormat: "F j, Y",
-                              dateFormat: "Y-m-d",
-                            }}
-                          />
-                        </div>
-                      </Form>
-                    </CardBody>
-                  </Card>
-                </div>*/}
+                <NodeProperties />
               </div>
             </div>
           </div>

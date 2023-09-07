@@ -297,3 +297,5 @@ export const getIntegrations = () => api.get(url.GET_INTEGRATIONS, null);
 export const getIntegrationTemplates = () => api.get(url.GET_INTEGRATION_TEMPLATES, null);
 
 export const addNewIntegration = (order: any) => api.create(url.POST_INTEGRATION, order);
+
+export const getIntegrationById = (id: string) => api.get(url.GET_INTEGRATION + id, null);

@@ -213,7 +213,7 @@ const authProtectedRoutes = [
   { path: "/integration-template-detail", component: <IntegrationTemplateDetail/> },
 
   //Node Editor
-  { path: "/interconnectivity-node-editor", component: <LogicNodeEditor /> },
+  { path: "/interconnectivity-node-editor/:id", component: <LogicNodeEditor /> },
 
   //File Manager
   { path: "/apps-filemanager", component: <FileManager /> },

@@ -29,7 +29,7 @@ import { RestApiEndpoint } from "./rete/nodes/web-protocols/rest-api/endpoint";
 
 import { editor } from "./editor";
 
-const FileRightBar = () => {
+const FileLeftBar = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [dropdowns, setDropdowns] = useState({
     WebProtocols: false,
@@ -525,4 +525,4 @@ const FileRightBar = () => {
   );
 };
 
-export default FileRightBar;
+export default FileLeftBar;
