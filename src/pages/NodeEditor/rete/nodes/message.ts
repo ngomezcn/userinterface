@@ -3,28 +3,20 @@ import "rete";
 import { ClassicPreset } from "rete";
 import { TextSocket, ActionSocket } from "../sockets";
 
-class Greeter {
-  pruebaLoca: string;
- 
-  constructor() {
-    this.pruebaLoca = "asdasdasdasdasd";
-  }
-}
 export class Message extends ClassicPreset.Node<
   { exec: ClassicPreset.Socket; text: ClassicPreset.Socket },
   { text: ClassicPreset.Socket },
   { value: ClassicPreset.InputControl<"text"> }
 > {
-  width = 180;
-  height = 140;
 
-  holaTest : Greeter;
+
+  parameters: string;
 
   constructor(initial: string) {
     super("Endpoint");
-    
-    this.holaTest = new Greeter();
-  
+
+    this.parameters = "vacio " + Math.random() + initial
+
     this.addControl(
       "value",
       new ClassicPreset.InputControl("text", { initial })
@@ -34,12 +26,13 @@ export class Message extends ClassicPreset.Node<
       "exec",
       new ClassicPreset.Input(new ActionSocket(), "Action")
     );
-    
+
   }
 
-  execute() {}
+  execute() { }
 
   data() {
+
     return {
       text: this.controls.value.value || ""
     };

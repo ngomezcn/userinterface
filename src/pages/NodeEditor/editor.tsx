@@ -17,6 +17,7 @@ import {
 Message
 } from "./rete/nodes";
 import { selector } from "rete-area-plugin/_types/extensions";
+import { greeter } from "./parameters"
 
 class ButtonControl extends ClassicPreset.Control {
   constructor(public label: string, public onClick: () => void) {
@@ -74,11 +75,21 @@ type Schemes = GetSchemes<
 type AreaExtra = ReactArea2D<any> | ContextMenuExtra;
 
 export let editor;
+export let socket;
 
 let test = true
 
-export async function createEditor(container: HTMLElement) {
-  const socket = new ClassicPreset.Socket("socket");
+let lastAreaEvent = ""
+
+//export async function createEditor(container: HTMLElement) {
+  export async function createEditor(
+    container: HTMLElement,
+    setNodeToParameters: (type: Message) => void,
+    hideParams: () => void
+    //hideParams : () => void
+  ) {
+
+  socket = new ClassicPreset.Socket("socket");
 
   const editor = new NodeEditor<Schemes>();
   const area = new AreaPlugin<Schemes, AreaExtra>(container);
@@ -93,9 +104,6 @@ export async function createEditor(container: HTMLElement) {
     accumulating: AreaExtensions.accumulateOnCtrl()
   });*/
 
-
-
-
   render.addPreset(Presets.classic.setup());
   connection.addPreset(ConnectionPresets.classic.setup());
 
@@ -108,10 +116,14 @@ export async function createEditor(container: HTMLElement) {
   const ab = new Message("Hello!");
   await editor.addNode(ab);
 
+  const adb = new Message("test!");
+  await editor.addNode(adb);
+
   const a = new ClassicPreset.Node("A");
   a.addControl("d", new ClassicPreset.InputControl("text", { initial: "a" }));
   a.addOutput("a", new ClassicPreset.Output(socket));
   await editor.addNode(a);
+
 
   const b = new ClassicPreset.Node("B");
   b.addControl("g", new ClassicPreset.InputControl("text", { initial: "b" }));
@@ -125,31 +137,44 @@ export async function createEditor(container: HTMLElement) {
 
   area.addPipe(context => {
     
+    //console.log(context.type)
+    if(lastAreaEvent  === 'pointerdown' && context.type === 'pointerup')
+    {
+      hideParams()
+    }
+
     if (context.type === 'nodepicked')
     {
-      console.log("nodepicked")
-      console.log("selector" + selector.pickId) 
-      console.log("nodes" + JSON.stringify(editor.getNodes())) 
+      //console.log("nodepicked")
+      //console.log("selector" + selector.pickId) 
+      //console.log("nodes" + JSON.stringify(editor.getNodes())) 
 
       let id : string = selector.pickId?.replace("node_", "") || "";
-      let a = editor.getNodes().find(node => node.id === id);
+      let selectedNode = editor.getNodes().find(node => node.id === id);
 
-      if(test)
+      setNodeToParameters(selectedNode as Message)
+
+      /*if(test)
       {
         a?.addOutput("rly", new ClassicPreset.Output(socket));
         test = false
       }
       area.update("node", id)
 
+      greeter.greeting = "prueba " + greeter.greeting
+      console.log(greeter.greeting)
       let xd = a as Message
 
-      console.log(xd?.holaTest)
+      log("adsad", xd)
+      xd.parameters = "modificado" + xd.parameters*/
+
+      //console.log(xd?.holaTest)
 
       //[0].addOutput("rly", new ClassicPreset.Output(socket));
       //area.update()
 
     }
-
+    lastAreaEvent = context.type
     return context
   })
 
@@ -182,8 +207,6 @@ export async function createEditor(container: HTMLElement) {
 
         test = false
       }
-
-
 
       //console.log("EXPORT")
       //console.log(exportGraph(editor))
