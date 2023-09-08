@@ -59,6 +59,19 @@ import "flatpickr/dist/themes/material_blue.css";
 import { createEditor, editor, socket } from "./editor";
 import { Message } from "./rete/nodes";
 
+const varStyle = {
+  fontWeight: "bold",
+  color: "green",     
+  fontFamily: '"Consolas", monospace'
+}
+
+const hardCodeStyle = {
+  fontWeight: "normal",
+  color: "black",
+  fontFamily: '"Consolas", monospace'
+}
+
+
 let nodeParameter: Message;
 
 const Index = () => {
@@ -68,11 +81,20 @@ const Index = () => {
   const simpleBarRef = useRef(null);
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [textareabadge, settextareabadge] = useState(0) as any[];
+  const refAuthKey = useRef(null);
 
   const [paramsLabel, setParamsLabel] = useState("Datepicker");
   const [showSimpleBar, setShowSimpleBar] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
+  const [selectedAuthType, setSelectedMethod] = useState("No Auth");
+  const [inputValue, setInputValue] = useState("");
+
+  const [inputStyles, setInputStyles] = useState(hardCodeStyle);
+ 
+  const handleAuthTypeChange = (e) => {
+    setSelectedMethod(e.target.value);
+  };
 
   const handleTextareaChange = (e) => {
     const text = e.target.value;
@@ -146,6 +168,23 @@ const Index = () => {
       e.target.value = "/" + e.target.value;
     }
   };
+
+
+  const handleChange = (e) => {
+
+    var text = e.target.value as string
+
+    if(text[0] == "{" && text[text.length-1] == "}" )
+    {
+      setInputStyles(varStyle);
+    } else{
+      setInputStyles(hardCodeStyle);
+    }
+
+    setInputValue(text);
+  };
+
+  
 
   return (
     <React.Fragment>
@@ -233,7 +272,6 @@ const Index = () => {
                                 <Input
                                   name="optionalEnviroments"
                                   type="text"
-                                  hint="asd"
                                   onChange={endpointFixSlash}
                                 />
                               </div>
@@ -285,22 +323,72 @@ const Index = () => {
                                 </Label>{" "}
                               </div>
 
-                              <div className="form-group mb-4">
-                                <Label>Method</Label>
+                              <div className="form-group mb-2">
+                                <Label>Type</Label>
                                 <Input
                                   name="mainEnviroment"
                                   type="select"
                                   className="form-select"
+                                  value={selectedAuthType}
+                                  onChange={handleAuthTypeChange}
                                 >
                                   <option>No Auth</option>
                                   <option>API Key</option>
                                   <option>Bearer Token</option>
                                   <option>Basic Auth</option>
                                   <option>Digest Auth</option>
+                                  <option>Custom code</option>
                                 </Input>
                               </div>
 
+                              {selectedAuthType === "API Key" && (
+                                <div>
+                                  <div className="form-group mb-2">
+                                    <Label>Key</Label>
+                                    <Input
+                                      ref={refAuthKey} 
+                                      style={inputStyles}
+                                      value={inputValue}
+                                      onChange={handleChange}
+                                      name="optionalEnviroments"
+                                      type="text"
+                                    />
+                                  </div>
+                                  <div className="form-group mb-2">
+                                    <Label>Value</Label>
+                                    <Input
+                                      name="optionalEnviroments"
+                                      type="text"
+                                    />
+                                  </div>
+                                  <div className="form-group mb-2">
+                                    <Label>From</Label>
+                                    <Input
+                                      name="mainEnviroment"
+                                      type="select"
+                                      className="form-select"
+                                    >
+                                      <option>Header</option>
+                                      <option>Query Params</option>
+                                    </Input>
+                                  </div>
+                                </div>
+                              )}
 
+                              {selectedAuthType === "Bearer Token" && (
+                                <div>
+                                  <div className="form-group mb-2">
+                                    <Label>Token</Label>
+                                    <Input
+                                      name="optionalEnviroments"
+                                      type="text"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+
+                              <br></br>
+                              <br></br>
                               <div
                                 style={{
                                   borderBottom: "2px solid black",
@@ -336,6 +424,39 @@ const Index = () => {
                                 </Input>
                               </div>
 
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
+                              <br></br>
                               <div className="form-group mb-0">
                                 <label>Inline Datepicker</label>
                                 <Flatpickr
