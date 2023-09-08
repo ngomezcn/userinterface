@@ -24,9 +24,11 @@ import LogicNodeEditor from "../pages/NodeEditor/index"
 // Integrations Template Details
 import IntegrationTemplateDetail from "../pages/Integration-template-detail/index"
 
+// Models
+import Models from "../pages/Models/index"
+
 // File Manager
 import FileManager from "../pages/FileManager/index"
-
 
 //Ecommerce
 import EcommerceAddProduct from "../pages/Ecommerce/EcommerceAddProduct";
@@ -211,6 +213,9 @@ const authProtectedRoutes = [
 
   // Integrations Template Details
   { path: "/integration-template-detail", component: <IntegrationTemplateDetail/> },
+
+  // Integrations Template Details
+  { path: "/interconnectivity-models", component: <Models/> },
 
   //Node Editor
   { path: "/interconnectivity-node-editor/:id", component: <LogicNodeEditor /> },

@@ -56,42 +56,95 @@ import { NodeEditor, GetSchemes, ClassicPreset } from "rete";
 import "@vtaits/react-color-picker/dist/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "flatpickr/dist/themes/material_blue.css";
-import { createEditor, editor, socket } from "./editor";
+import { createEditor, editor, socket, area } from "./editor";
 import { Message } from "./rete/nodes";
+import { replace } from "lodash";
+import LabelSubTitle from "./params-subtitle";
+import EndpointParameter from "./endpointParameter";
+
+const integrationModels: string[] = [
+  "Clientes",
+  "Proveedores",
+  "Artículos",
+  "Facturas de venta",
+  "Pedidos de compra",
+  "Inventarios",
+  "Documentos de marketing",
+  "Asientos contables",
+  "Informe de ventas",
+  "Informe de compras",
+  // Agrega más elementos según tus necesidades
+];
+
+const generics: string[] = ["List<_TYPE_>"];
 
 const varStyle = {
   fontWeight: "bold",
-  color: "green",     
-  fontFamily: '"Consolas", monospace'
-}
+  color: "green",
+  fontFamily: '"Consolas", monospace',
+};
 
 const hardCodeStyle = {
   fontWeight: "normal",
   color: "black",
-  fontFamily: '"Consolas", monospace'
-}
+  fontFamily: '"Consolas", monospace',
+};
 
+const initialInputState = {
+  endpoint: {
+    value: "",
+    style: hardCodeStyle,
+  },
+  method: {
+    value: "",
+    style: hardCodeStyle,
+  },
+  apiKey: {
+    value: "",
+    style: hardCodeStyle,
+  },
+  apiKeyValue: {
+    value: "",
+    style: hardCodeStyle,
+  },
+};
 
 let nodeParameter: Message;
 
 const Index = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [data, dataSet] = useState<any>(null);
   const simpleBarRef = useRef(null);
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [textareabadge, settextareabadge] = useState(0) as any[];
-  const refAuthKey = useRef(null);
 
   const [paramsLabel, setParamsLabel] = useState("Datepicker");
   const [showSimpleBar, setShowSimpleBar] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const textareaRef = useRef(null);
   const [selectedAuthType, setSelectedMethod] = useState("No Auth");
+  const [isNodeEndpoint, setIsNodeEndpoint] = useState(true);
+
   const [inputValue, setInputValue] = useState("");
 
   const [inputStyles, setInputStyles] = useState(hardCodeStyle);
- 
+  const [inputStates, setInputStates] = useState(initialInputState);
+  const [count, setCount] = useState(0);
+  const [inputs, setInputs] = useState<string[]>([]);
+
+  // Función para agregar un nuevo input con un valor predeterminado
+  const addInput = (value) => {
+    let node = nodeParameter as ClassicPreset.Node;
+    let xd = node.addOutput(value, new ClassicPreset.Output(socket));
+    area.update("node", node.id);
+    setInputs([...inputs, value]);
+  };
+
+  const forceUpdate = () => {
+    setCount(count + 1);
+  };
+
   const handleAuthTypeChange = (e) => {
     setSelectedMethod(e.target.value);
   };
@@ -103,6 +156,12 @@ const Index = () => {
   };
 
   function setNodeToParameters(type: Message) {
+    if (type.node_name_id) {
+      setIsNodeEndpoint(false);
+    } else {
+      setIsNodeEndpoint(true);
+    }
+
     nodeParameter = type;
     setParamsLabel(type.label);
     setTextareaValue(nodeParameter.parameters);
@@ -113,8 +172,6 @@ const Index = () => {
     setShowSimpleBar(false);
     setcustomActiveTab("1");
   }
-
-  const [messageApi, contextHolder] = message.useMessage();
 
   const create = useCallback((el: HTMLElement) => {
     //return createEditor(el, (text, type) => messageApi[type](text));
@@ -136,16 +193,58 @@ const Index = () => {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      console.log("Llamada");
       let idIntegration = id || "";
       let response = await getIntegrationById(idIntegration);
       dataSet(response);
-      console.log("Respuesta: " + JSON.stringify(response));
+      //console.log("Respuesta: " + JSON.stringify(response));
       setLoading(false); // Set loading to false
+      forceUpdate();
     }
 
     fetchMyAPI();
   }, [id]);
+
+  const handleChange = (e, fieldName) => {
+    let text = e.target.value;
+    const newState = { ...inputStates };
+
+    // Cambia el estilo según el contenido del input
+    if (text.startsWith("{") && text.endsWith("}")) {
+      newState[fieldName].style = varStyle;
+      text = text.replace("{{", "{");
+      text = text.replace("}}", "}");
+    } else {
+      newState[fieldName].style = hardCodeStyle;
+    }
+
+    newState[fieldName].value = text;
+    setInputStates(newState);
+  };
+
+  const endpointFixSlash = (e) => {
+    const fieldName = "endpoint";
+
+    let text = e.target.value;
+    const newState = { ...inputStates };
+
+    if (text.startsWith("{") && text.endsWith("}")) {
+      newState[fieldName].style = varStyle;
+      text = text.replace("{{", "{");
+      text = text.replace("}}", "}");
+    } else {
+      if (text[0] != "/" && text[0] != "{") {
+        text = "/" + text;
+        newState[fieldName].style = hardCodeStyle;
+      }
+    }
+    if (text == "/") {
+      text = "";
+    }
+    text = text.replace("//", "/");
+
+    newState[fieldName].value = text;
+    setInputStates(newState);
+  };
 
   if (loading) {
     return (
@@ -163,28 +262,10 @@ const Index = () => {
     );
   }
 
-  const endpointFixSlash = (e) => {
-    if (e.target.value[0] != "/") {
-      e.target.value = "/" + e.target.value;
-    }
+  const handleRemoveInput = (indexToRemove) => {
+    const a = inputs.filter((_, index) => index !== indexToRemove);
+    setInputs(a);
   };
-
-
-  const handleChange = (e) => {
-
-    var text = e.target.value as string
-
-    if(text[0] == "{" && text[text.length-1] == "}" )
-    {
-      setInputStyles(varStyle);
-    } else{
-      setInputStyles(hardCodeStyle);
-    }
-
-    setInputValue(text);
-  };
-
-  
 
   return (
     <React.Fragment>
@@ -192,7 +273,7 @@ const Index = () => {
         <Container fluid style={{ height: "100%" }}>
           <Breadcrumbs
             title="Interconnectivity"
-            //breadcrumbItem={"Node Editor - " + data.projectName}
+            breadcrumbItem={"Node Editor - " + data.projectName}
             customRoute="Node Editor"
           />
           <div className="d-xl-flex flex-column" style={{ height: "100%" }}>
@@ -266,211 +347,227 @@ const Index = () => {
                           className="p-3 text-muted"
                         >
                           <TabPane tabId="1">
-                            <Form>
-                              <div className="form-group mb-4">
-                                <Label>Endpoint</Label>
-                                <Input
-                                  name="optionalEnviroments"
-                                  type="text"
-                                  onChange={endpointFixSlash}
-                                />
-                              </div>
+                            {isNodeEndpoint === true && (
+                              <p style={{ height: "700px", width: "310px" }}>Not implemented</p>
+                            )}
 
-                              <div className="form-group mb-4">
-                                <Label>Method</Label>
-                                <Input
-                                  name="mainEnviroment"
-                                  type="select"
-                                  className="form-select"
-                                >
-                                  <option></option>
-                                  <option>GET</option>
-                                  <option>POST</option>
-                                  <option>PUT</option>
-                                  <option>PATH</option>
-                                  <option>DELETE</option>
-                                  <option>COPY</option>
-                                  <option>HEAD</option>
-                                  <option>OPTIONS</option>
-                                  <option>LINK</option>
-                                  <option>UNLINK</option>
-                                  <option>PURGE</option>
-                                  <option>LOCK</option>
-                                  <option>UNLOCK</option>
-                                  <option>PROPFIND</option>
-                                  <option>VIEW</option>
-                                </Input>
-                              </div>
+                            {isNodeEndpoint === false && (
+                              <Form>
+                                <div className="form-group mb-2">
+                                  <Label>Endpoint</Label>
+                                  <Input
+                                    name="optionalEnviroments"
+                                    type="text"
+                                    value={inputStates.endpoint.value}
+                                    onChange={(e) => {
+                                      endpointFixSlash(e);
+                                    }}
+                                    style={inputStates.endpoint.style}
+                                  />
+                                </div>
 
-                              <div
-                                style={{
-                                  borderBottom: "2px solid black",
-                                  display: "inline-block",
-                                  width: "100%",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                {" "}
-                                <Label
-                                  style={{
-                                    color: "black",
-                                    fontSize: "15px",
-                                    marginBottom: "-10px",
-                                  }}
-                                >
-                                  {" "}
-                                  Authentication{" "}
-                                </Label>{" "}
-                              </div>
+                                <div className="form-group mb-2">
+                                  <Label>Method</Label>
+                                  <Input
+                                    name="mainEnviroment"
+                                    type="select"
+                                    className="form-select"
+                                    value={inputStates.method.value}
+                                    onChange={(e) => handleChange(e, "method")}
+                                    style={inputStates.method.style}
+                                  >
+                                    <option></option>
+                                    <option>GET</option>
+                                    <option>POST</option>
+                                    <option>PUT</option>
+                                    <option>PATH</option>
+                                    <option>DELETE</option>
+                                    <option>COPY</option>
+                                    <option>HEAD</option>
+                                    <option>OPTIONS</option>
+                                    <option>LINK</option>
+                                    <option>UNLINK</option>
+                                    <option>PURGE</option>
+                                    <option>LOCK</option>
+                                    <option>UNLOCK</option>
+                                    <option>PROPFIND</option>
+                                    <option>VIEW</option>
+                                  </Input>
+                                </div>
 
-                              <div className="form-group mb-2">
-                                <Label>Type</Label>
-                                <Input
-                                  name="mainEnviroment"
-                                  type="select"
-                                  className="form-select"
-                                  value={selectedAuthType}
-                                  onChange={handleAuthTypeChange}
-                                >
-                                  <option>No Auth</option>
-                                  <option>API Key</option>
-                                  <option>Bearer Token</option>
-                                  <option>Basic Auth</option>
-                                  <option>Digest Auth</option>
-                                  <option>Custom code</option>
-                                </Input>
-                              </div>
+                                <LabelSubTitle text={"Authentication"} />
 
-                              {selectedAuthType === "API Key" && (
-                                <div>
-                                  <div className="form-group mb-2">
-                                    <Label>Key</Label>
-                                    <Input
-                                      ref={refAuthKey} 
-                                      style={inputStyles}
-                                      value={inputValue}
-                                      onChange={handleChange}
-                                      name="optionalEnviroments"
-                                      type="text"
-                                    />
+                                <div className="form-group mb-2">
+                                  <Label>Type</Label>
+                                  <Input
+                                    name="mainEnviroment"
+                                    type="select"
+                                    className="form-select"
+                                    value={selectedAuthType}
+                                    onChange={handleAuthTypeChange}
+                                  >
+                                    <option>No Auth</option>
+                                    <option>API Key</option>
+                                    <option>Bearer Token</option>
+                                    <option>Basic Auth</option>
+                                    <option>Digest Auth</option>
+                                    <option>Custom code</option>
+                                  </Input>
+                                </div>
+
+                                {selectedAuthType === "API Key" && (
+                                  <div>
+                                    <div className="form-group mb-2">
+                                      <Label>Key</Label>
+                                      <Input
+                                        name="optionalEnviroments"
+                                        type="text"
+                                        value={inputStates.apiKey.value}
+                                        onChange={(e) =>
+                                          handleChange(e, "apiKey")
+                                        }
+                                        style={inputStates.apiKey.style}
+                                      />
+                                    </div>
+                                    <div className="form-group mb-2">
+                                      <Label>Value</Label>
+                                      <Input
+                                        name="optionalEnviroments"
+                                        type="text"
+                                        value={inputStates.apiKeyValue.value}
+                                        onChange={(e) =>
+                                          handleChange(e, "apiKeyValue")
+                                        }
+                                        style={inputStates.apiKeyValue.style}
+                                      />
+                                    </div>
+                                    <div className="form-group mb-2">
+                                      <Label>From</Label>
+                                      <Input
+                                        name="mainEnviroment"
+                                        type="select"
+                                        className="form-select"
+                                      >
+                                        <option>Header</option>
+                                        <option>Query Params</option>
+                                      </Input>
+                                    </div>
                                   </div>
-                                  <div className="form-group mb-2">
-                                    <Label>Value</Label>
-                                    <Input
-                                      name="optionalEnviroments"
-                                      type="text"
-                                    />
+                                )}
+
+                                {selectedAuthType === "Bearer Token" && (
+                                  <div>
+                                    <div className="form-group mb-2">
+                                      <Label>Token</Label>
+                                      <Input
+                                        name="optionalEnviroments"
+                                        type="text"
+                                      />
+                                    </div>
                                   </div>
-                                  <div className="form-group mb-2">
-                                    <Label>From</Label>
-                                    <Input
-                                      name="mainEnviroment"
-                                      type="select"
-                                      className="form-select"
+                                )}
+
+                                <LabelSubTitle text="Parameters" />
+
+                                <div
+                                  className="mt-auto"
+                                  style={{ marginBottom: "15px" }}
+                                >
+                                  <UncontrolledDropdown>
+                                    <DropdownToggle
+                                      className="btn btn-soft-primary w-100"
+                                      type="button"
                                     >
-                                      <option>Header</option>
-                                      <option>Query Params</option>
-                                    </Input>
-                                  </div>
+                                      Add
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                      <DropdownItem
+                                        href="#"
+                                        onClick={() => addInput("From Body")}
+                                      >
+                                        <i className="bx bx-certification me-1"></i>
+                                        From Body
+                                      </DropdownItem>
+                                      <DropdownItem
+                                        href="#"
+                                        onClick={() => addInput("From Header")}
+                                      >
+                                        <i className="bx bx-dock-top me-1"></i>
+                                        From Header
+                                      </DropdownItem>
+                                      <DropdownItem
+                                        href="#"
+                                        onClick={() => addInput("From Query")}
+                                      >
+                                        <i className="bx bx-voicemail me-1"></i>
+                                        From Query
+                                      </DropdownItem>
+                                      <DropdownItem
+                                        href="#"
+                                        onClick={() => addInput("From Form")}
+                                      >
+                                        <i className="bx bxs-notepad me-1"></i>
+                                        From Form
+                                      </DropdownItem>
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
                                 </div>
-                              )}
 
-                              {selectedAuthType === "Bearer Token" && (
-                                <div>
-                                  <div className="form-group mb-2">
-                                    <Label>Token</Label>
-                                    <Input
-                                      name="optionalEnviroments"
-                                      type="text"
-                                    />
-                                  </div>
-                                </div>
-                              )}
-
-                              <br></br>
-                              <br></br>
-                              <div
-                                style={{
-                                  borderBottom: "2px solid black",
-                                  display: "inline-block",
-                                  width: "100%",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                {" "}
-                                <Label
-                                  style={{
-                                    color: "black",
-                                    fontSize: "15px",
-                                    marginBottom: "-10px",
-                                  }}
-                                >
-                                  {" "}
-                                  Response{" "}
-                                </Label>{" "}
-                              </div>
-
-                              <div className="form-group mb-4">
-                                <Label>Method</Label>
-                                <Input
-                                  name="mainEnviroment"
-                                  type="select"
-                                  className="form-select"
-                                >
-                                  <option>No Auth</option>
-                                  <option>API Key</option>
-                                  <option>Bearer Token</option>
-                                  <option>Basic Auth</option>
-                                </Input>
-                              </div>
-
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <br></br>
-                              <div className="form-group mb-0">
-                                <label>Inline Datepicker</label>
-                                <Flatpickr
-                                  className="form-control d-block"
-                                  placeholder="dd M,yyyy"
-                                  options={{
-                                    inline: true,
-                                    altInput: true,
-                                    altFormat: "F j, Y",
-                                    dateFormat: "Y-m-d",
-                                  }}
+                                <EndpointParameter
+                                  menuInputs={inputs}
+                                  generics={generics}
+                                  integrationModels={integrationModels}
+                                  removeInput={handleRemoveInput}
                                 />
-                              </div>
-                            </Form>
+
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <div className="form-group mb-0">
+                                  <label>Inline Datepicker</label>
+                                  <Flatpickr
+                                    className="form-control d-block"
+                                    placeholder="dd M,yyyy"
+                                    options={{
+                                      inline: true,
+                                      altInput: true,
+                                      altFormat: "F j, Y",
+                                      dateFormat: "Y-m-d",
+                                    }}
+                                  />
+                                </div>
+                              </Form>
+                            )}
                           </TabPane>
 
                           <TabPane tabId="2">

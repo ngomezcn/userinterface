@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
+    getDemoData as getDemoDataApi,
     getJobList as getJobListApi,
     deleteJobList as getDeleteJobListApi,
     getApplyJob as getApplyJobApi,
@@ -8,12 +9,15 @@ import {
     addNewJobList as addNewJobListApi,
     updateJobList as updateJobListApi,
     getJobGrid as getJobGridApi,
-    getJobCandidateList as getJobCandidateListApi
+    getJobCandidateList as getJobCandidateListApi,
+    getIntegrationTemplates as getIntegrationTemplatesApi,
+
+    getModelsList as getModelsListApi,
 } from "../../helpers/fakebackend_helper";
 
-export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
+export const getModelsLis = createAsyncThunk("jobs/getJobsList", async () => {
     try {
-        const response = getJobListApi();
+        const response = getModelsListApi();
         return response;
     } catch (error) {
         return error;
@@ -65,10 +69,19 @@ export const updateJobList = createAsyncThunk("jobs/updateJob", async (jobs: any
     }
 })
 
+export const getIntegrationTemplates = createAsyncThunk("jobs/getJobsGrid", async () => {
+    try {
+        const response = getIntegrationTemplatesApi();
+        return response;
+    } catch (error) {
+        return error;
+    }
+});
+
 //job grid
 export const getJobGrid = createAsyncThunk("jobs/getJobsGrid", async () => {
     try {
-        const response = getJobGridApi();
+        const response = getJobListApi();
         return response;
     } catch (error) {
         return error;

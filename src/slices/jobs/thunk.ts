@@ -10,17 +10,10 @@ import {
     updateJobList as updateJobListApi,
     getJobGrid as getJobGridApi,
     getJobCandidateList as getJobCandidateListApi,
-    getIntegrationTemplates as getIntegrationTemplatesApi
-} from "../../helpers/fakebackend_helper";
+    getIntegrationTemplates as getIntegrationTemplatesApi,
 
-/*export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
-    try {
-        const response = getJobListApi();
-        return response;
-    } catch (error) {
-        return error;
-    }
-});*/
+    getModelsList as getModelsListApi,
+} from "../../helpers/fakebackend_helper";
 
 export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
     try {
@@ -30,7 +23,6 @@ export const getJobList = createAsyncThunk("jobs/getJobsList", async () => {
         return error;
     }
 });
-
 
 export const deleteJobList = createAsyncThunk("jobs/deleteJobList", async (jobs: any) => {
     try {
