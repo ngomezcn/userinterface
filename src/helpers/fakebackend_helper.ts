@@ -300,4 +300,8 @@ export const addNewIntegration = (order: any) => api.create(url.POST_INTEGRATION
 
 export const getIntegrationById = (id: string) => api.get(url.GET_INTEGRATION + id, null);
 
+export const getModelListById = (id: string) => api.get(url.MODELS + id, null);
+
 export const getModelsList = () => api.get(url.MODELS, null);
+
+export const putDataModel = (data: any) => api.put(url.MODELS, data);

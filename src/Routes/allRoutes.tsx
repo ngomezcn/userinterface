@@ -21,6 +21,9 @@ import IntegrationsTemplates from "../pages/Integration-templates/index"
 // Node Editor
 import LogicNodeEditor from "../pages/NodeEditor/index"
 
+// DataModelDetail
+import DataModelDetail from "../pages/data-model-detail/index"
+
 // Integrations Template Details
 import IntegrationTemplateDetail from "../pages/Integration-template-detail/index"
 
@@ -212,7 +215,10 @@ const authProtectedRoutes = [
   { path: "/integration-templates", component: <IntegrationsTemplates/> },
 
   // Integrations Template Details
-  { path: "/integration-template-detail", component: <IntegrationTemplateDetail/> },
+  { path: "/integration-template-detail/47784bfc-1ff5-4e9c-9971-f7a08afb3fc9", component: <IntegrationTemplateDetail/> },
+
+  // DataModelDetail Details
+  { path: "/interconnectivity-data-model-detail/:id", component: <DataModelDetail/> },
 
   // Integrations Template Details
   { path: "/interconnectivity-models", component: <Models/> },

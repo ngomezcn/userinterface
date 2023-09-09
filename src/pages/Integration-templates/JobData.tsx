@@ -89,7 +89,7 @@ const JobData = ({ jobGrid }: any) => {
                 </div>
                 <div className="mt-4 hstack gap-2">
                   <Link
-                    to="/integration-template-detail"
+                    to="/integration-template-detail/47784bfc-1ff5-4e9c-9971-f7a08afb3fc9"
                     className="btn btn-soft-success w-100"
                   >
                     View

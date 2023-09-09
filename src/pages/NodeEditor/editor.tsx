@@ -13,7 +13,6 @@ import { ContextMenuExtra } from "rete-context-menu-plugin";
 
 import { Message } from "./rete/nodes";
 import { selector } from "rete-area-plugin/_types/extensions";
-import { greeter } from "./parameters";
 
 class ButtonControl extends ClassicPreset.Control {
   constructor(public label: string, public onClick: () => void) {

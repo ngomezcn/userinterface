@@ -270,7 +270,7 @@ const Integrations = () => {
                         <td>
                           <h5 className="text-truncate font-size-14">
                             <Link
-                              to={`/projects-overview/${project.id}`}
+                              to={`/interconnectivity-node-editor/${project.id}`}
                               className="text-dark"
                             >
                               {project.projectName}{" "}
