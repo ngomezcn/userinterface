@@ -29,4 +29,3 @@ export class OnMessage extends ClassicPreset.Node<
     };
   }
 }
-

@@ -9,6 +9,7 @@ export const GET_INTEGRATION_TEMPLATES = BASE_HOST + "/IntegrationTemplates";
 export const GET_INTEGRATION = BASE_HOST + "/Integrations/";
 export const GET_INTEGRATIONS = BASE_HOST + "/Integrations";
 export const POST_INTEGRATION = BASE_HOST + "/Integrations";
+export const PUT_INTEGRATION = BASE_HOST + "/Integrations";
 
 export const MODELS = BASE_HOST + "/DataModels/";
 

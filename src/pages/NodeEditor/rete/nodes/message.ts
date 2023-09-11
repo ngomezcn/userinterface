@@ -1,7 +1,5 @@
-import "rete";
-
 import { ClassicPreset } from "rete";
-import { TextSocket, ActionSocket } from "../sockets";
+import { TextSocket } from "../sockets";
 
 class ApikeyParameters {
   Key: string = '';
@@ -25,29 +23,8 @@ class EndpointParameters {
   JsonBody: string = '';
 }
 
-export class EndpointRestApi extends ClassicPreset.Node<
-  { exec: ClassicPreset.Socket; text: ClassicPreset.Socket },
-  { text: ClassicPreset.Socket },
-  { value: ClassicPreset.InputControl<"text"> }
-> implements ICustomNode {
-
-  objectParameters: EndpointParameters = new EndpointParameters();
-  nodeJsonParameters: string = "";
-  id_name: string = "";
-
-  constructor(initial: string) {
-    super("Endpoint Rest APi");
-
-    this.addOutput("text", new ClassicPreset.Output(new TextSocket(), "Text"));
-    this.addInput(
-      "exec",
-      new ClassicPreset.Input(new ActionSocket(), "Action")
-    );
-  }
-}
-
 export class Message extends ClassicPreset.Node<
-  { exec: ClassicPreset.Socket; text: ClassicPreset.Socket },
+  {},
   { text: ClassicPreset.Socket },
   { value: ClassicPreset.InputControl<"text"> }
 > {
@@ -55,8 +32,11 @@ export class Message extends ClassicPreset.Node<
   parameters: string;
   node_name_id = "endpoint"
 
+  width = 180;
+  height = 140;
+
   constructor(initial: string) {
-    super("Endpoint");
+    super("Message");
 
     this.parameters = "vacio " + Math.random() + initial
 
@@ -65,17 +45,11 @@ export class Message extends ClassicPreset.Node<
       new ClassicPreset.InputControl("text", { initial })
     );
     this.addOutput("text", new ClassicPreset.Output(new TextSocket(), "Text"));
-    this.addInput(
-      "exec",
-      new ClassicPreset.Input(new ActionSocket(), "Action")
-    );
-
   }
 
-  execute() { }
+  execute() {}
 
   data() {
-
     return {
       text: this.controls.value.value || ""
     };

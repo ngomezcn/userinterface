@@ -305,3 +305,5 @@ export const getModelListById = (id: string) => api.get(url.MODELS + id, null);
 export const getModelsList = () => api.get(url.MODELS, null);
 
 export const putDataModel = (data: any) => api.put(url.MODELS, data);
+
+export const putIntegration = (data: any) => api.put(url.PUT_INTEGRATION, data);

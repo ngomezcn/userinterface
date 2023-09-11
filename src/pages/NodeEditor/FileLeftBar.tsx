@@ -29,7 +29,7 @@ import { RestApiEndpoint } from "./rete/nodes/web-protocols/rest-api/endpoint";
 
 import { editor } from "./editor";
 
-const FileLeftBar = () => {
+const FileLeftBar = ({ saveNodeEditor }) => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [dropdowns, setDropdowns] = useState({
     WebProtocols: false,
@@ -512,7 +512,7 @@ const FileLeftBar = () => {
                   <DropdownItem href="#">
                     <i className="bx bx-file-blank me-1"></i>Save and download
                   </DropdownItem>
-                  <DropdownItem href="#">
+                  <DropdownItem href="" onClick={saveNodeEditor}>
                     <i className="bx bxs-save me-1"></i>Save only
                   </DropdownItem>
                 </DropdownMenu>

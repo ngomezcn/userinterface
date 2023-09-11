@@ -56,11 +56,16 @@ import { NodeEditor, GetSchemes, ClassicPreset } from "rete";
 import "@vtaits/react-color-picker/dist/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import "flatpickr/dist/themes/material_blue.css";
-import { createEditor, editor, socket, area } from "./editor";
+import { createEditor, editor, socket, area, nodeEditorConnections, nodeEditorNodes } from "./editor";
 import { Message } from "./rete/nodes";
 import { replace } from "lodash";
 import LabelSubTitle from "./params-subtitle";
 import EndpointParameter from "./endpointParameter";
+import {
+  getModelListById,
+  putIntegration,
+} from "../../helpers/fakebackend_helper";
+import { useNavigate } from "react-router-dom";
 
 const integrationModels: string[] = [
   "Clientes",
@@ -111,7 +116,10 @@ const initialInputState = {
 
 let nodeParameter: Message;
 
+let dataToImport : any
+
 const Index = () => {
+  let navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const [data, dataSet] = useState<any>(null);
@@ -133,7 +141,34 @@ const Index = () => {
   const [count, setCount] = useState(0);
   const [inputs, setInputs] = useState<string[]>([]);
 
-  // Función para agregar un nuevo input con un valor predeterminado
+  async function saveNodeEditor() {
+
+    if(nodeEditorNodes != undefined && nodeEditorConnections != undefined)
+    {
+
+      data.nodes = nodeEditorNodes as string
+      data.connections = nodeEditorConnections as string
+
+      console.log("data.nodes " + data.nodes)
+      //console.log("data.connection " + data.nodes)
+
+      try {
+        //console.log(JSON.stringify(data, null, 2));
+      } catch (error) {
+        //console.log(data);
+      }
+
+      try {
+        let response = await putIntegration(data);
+        window.location.reload();
+      } catch (error) {
+        throw(error)
+      }
+    } else{
+      console.log("cannot send is undefined!")
+    }
+  }
+
   const addInput = (value) => {
     let node = nodeParameter as ClassicPreset.Node;
     let xd = node.addOutput(value, new ClassicPreset.Output(socket));
@@ -178,12 +213,18 @@ const Index = () => {
     return createEditor(
       el,
       (type) => setNodeToParameters(type),
-      () => hideNodeParams()
+      () => hideNodeParams(),
+      () => getImportData(),
     );
   }, []);
   const [ref] = useRete(create);
 
   document.title = "Node Editor";
+
+  function getImportData() : string[]
+  {
+    return [dataToImport.nodes as string, dataToImport.connections as string];
+  }
 
   const toggleCustom = (tab) => {
     if (customActiveTab !== tab) {
@@ -195,8 +236,16 @@ const Index = () => {
     async function fetchMyAPI() {
       let idIntegration = id || "";
       let response = await getIntegrationById(idIntegration);
-      dataSet(response);
+      dataToImport = response
+      await dataSet(response);
       //console.log("Respuesta: " + JSON.stringify(response));
+      
+      if(response.status == 204)
+      {
+        navigate(`/pages-404`)
+        console.log("wtf")
+      }
+
       setLoading(false); // Set loading to false
       forceUpdate();
     }
@@ -282,7 +331,7 @@ const Index = () => {
                 className="d-md-flex flex-column flex-md-row"
                 style={{ height: "100%" }}
               >
-                <FileLeftBar />
+                <FileLeftBar saveNodeEditor={saveNodeEditor}/>
 
                 <div
                   ref={ref}

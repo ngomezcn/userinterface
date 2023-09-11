@@ -257,7 +257,7 @@ function EcommerceOrder() {
           return <Date {...cellProps} />;
         }
       },
-      {
+      /*{
         Header: 'Total',
         accessor: 'total',
         filterable: true,
@@ -265,7 +265,7 @@ function EcommerceOrder() {
         Cell: (cellProps: any) => {
           return <Total {...cellProps} />;
         }
-      },
+      },*/
       {
         Header: 'Payment Status',
         accessor: 'paymentStatus',
